@@ -1,6 +1,6 @@
 package me.cpele.helloapp;
 
-import android.content.Context;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,17 +12,8 @@ import android.widget.EditText;
 
 public class LoginFragment extends Fragment {
 
-    private Listener mListener;
-
     public static Fragment newInstance() {
         return new LoginFragment();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof Listener) mListener = (Listener) context;
     }
 
     @Nullable
@@ -31,14 +22,15 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         final EditText loginEditText = view.findViewById(R.id.login_et);
         Button okButton = view.findViewById(R.id.login_bt_ok);
-        okButton.setOnClickListener(v -> {
-            mListener = Assert.notNull(mListener);
-            mListener.onSubmitLogin(String.valueOf(loginEditText.getText()));
-        });
-        return view;
-    }
 
-    interface Listener {
-        void onSubmitLogin(String text);
+        IdentificationViewModel viewModel = ViewModelProviders.of(getActivity()).get(IdentificationViewModel.class);
+
+        okButton.setOnClickListener(
+                v -> {
+                    viewModel.setLogin(String.valueOf(loginEditText.getText()));
+                    viewModel.goToPassword();
+                });
+
+        return view;
     }
 }

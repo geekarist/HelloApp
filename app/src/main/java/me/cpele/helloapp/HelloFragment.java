@@ -1,5 +1,6 @@
 package me.cpele.helloapp;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,13 +14,8 @@ public class HelloFragment extends Fragment {
     private static final String ARG_LOGIN = "ARG_LOGIN";
     private static final String ARG_PASSWORD = "ARG_PASSWORD";
 
-    public static HelloFragment newInstance(String login, String password) {
-        HelloFragment helloFragment = new HelloFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_LOGIN, login);
-        args.putString(ARG_PASSWORD, password);
-        helloFragment.setArguments(args);
-        return helloFragment;
+    public static HelloFragment newInstance() {
+        return new HelloFragment();
     }
 
     @Nullable
@@ -28,11 +24,13 @@ public class HelloFragment extends Fragment {
 
         View createdView = inflater.inflate(R.layout.fragment_hello, container, false);
 
+        IdentificationViewModel viewModel = ViewModelProviders.of(getActivity()).get(IdentificationViewModel.class);
+
         TextView titleTextView = createdView.findViewById(R.id.hello_tv_title);
-        String login = getArguments().getString(ARG_LOGIN);
+        String login = viewModel.getLogin();
         titleTextView.setText(getString(R.string.hello_user, login));
 
-        String password = getArguments().getString(ARG_PASSWORD);
+        String password = viewModel.getPassword();
         TextView strengthTextView = createdView.findViewById(R.id.hello_tv_strength);
         int strength = calculatePasswordStrength(password);
         strengthTextView.setText(getString(R.string.hello_strength, strength));

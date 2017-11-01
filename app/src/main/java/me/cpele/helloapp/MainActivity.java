@@ -1,16 +1,11 @@
 package me.cpele.helloapp;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity
-        extends AppCompatActivity
-        implements LoginFragment.Listener, PasswordFragment.Listener {
-
-    private String mLogin;
-    private String mPassword;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -18,36 +13,17 @@ public class MainActivity
 
         setContentView(R.layout.activity_main);
 
-        Fragment loginFragment = LoginFragment.newInstance();
+        IdentificationViewModel viewModel =
+                ViewModelProviders.of(this).get(IdentificationViewModel.class);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_fl_container, loginFragment)
-                .commit();
-    }
-
-    @Override
-    public void onSubmitLogin(String login) {
-
-        mLogin = login;
-
-        Fragment passwordFragment = PasswordFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_fl_container, passwordFragment)
-                .commit();
-    }
-
-
-    @Override
-    public void onSubmitPassword(String password) {
-
-        mPassword = password;
-
-        Fragment helloFragment = HelloFragment.newInstance(mLogin, mPassword);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_fl_container, helloFragment)
-                .commit();
+        viewModel.getCurrentStep().observe(
+                this,
+                step -> {
+                    step = Assert.notNull(step);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_fl_container, step.createFragment())
+                            .commit();
+                });
     }
 }
