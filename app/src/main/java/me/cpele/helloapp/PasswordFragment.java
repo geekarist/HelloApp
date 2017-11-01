@@ -7,38 +7,37 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginFragment extends Fragment {
+public class PasswordFragment extends Fragment {
 
     private Listener mListener;
 
-    public static Fragment newInstance() {
-        return new LoginFragment();
+    public static PasswordFragment newInstance() {
+        return new PasswordFragment();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof Listener) mListener = (Listener) context;
+        if (getActivity() instanceof Listener) mListener = (Listener) getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        final EditText loginEditText = view.findViewById(R.id.login_et);
-        Button okButton = view.findViewById(R.id.login_bt_ok);
-        okButton.setOnClickListener(v -> {
+        View view = inflater.inflate(R.layout.fragment_password, container, false);
+        EditText passwordEdit = view.findViewById(R.id.password_et);
+        View okButton = view.findViewById(R.id.password_bt_ok);
+        okButton.setOnClickListener(view1 -> {
             mListener = Assert.notNull(mListener);
-            mListener.onSubmitLogin(String.valueOf(loginEditText.getText()));
+            mListener.onSubmitPassword(String.valueOf(passwordEdit.getText()));
         });
         return view;
     }
 
     interface Listener {
-        void onSubmitLogin(String text);
+        void onSubmitPassword(String text);
     }
 }

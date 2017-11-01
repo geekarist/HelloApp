@@ -4,9 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.Listener {
+public class MainActivity
+        extends AppCompatActivity
+        implements LoginFragment.Listener, PasswordFragment.Listener {
+
+    private String mLogin;
+    private String mPassword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,7 +27,27 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
     }
 
     @Override
-    public void onLoginSubmitted(CharSequence text) {
-        Log.d(getClass().getSimpleName(), String.valueOf(text));
+    public void onSubmitLogin(String login) {
+
+        mLogin = login;
+
+        Fragment passwordFragment = PasswordFragment.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_fl_container, passwordFragment)
+                .commit();
+    }
+
+
+    @Override
+    public void onSubmitPassword(String password) {
+
+        mPassword = password;
+
+        Fragment helloFragment = HelloFragment.newInstance(mLogin, mPassword);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_fl_container, helloFragment)
+                .commit();
     }
 }
