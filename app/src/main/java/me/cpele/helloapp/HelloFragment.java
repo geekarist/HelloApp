@@ -11,13 +11,6 @@ import android.widget.TextView;
 
 public class HelloFragment extends Fragment {
 
-    private static final String ARG_LOGIN = "ARG_LOGIN";
-    private static final String ARG_PASSWORD = "ARG_PASSWORD";
-
-    public static HelloFragment newInstance() {
-        return new HelloFragment();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -12,10 +12,6 @@ import android.widget.EditText;
 
 public class LoginFragment extends Fragment {
 
-    public static Fragment newInstance() {
-        return new LoginFragment();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
